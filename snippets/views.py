@@ -6,6 +6,8 @@ from .permissions import IsOwnerOrReadOnly
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, action
+from django_filters import rest_framework as filters
+from .filters import SnippetFilter
 
 
 @api_view(['GET'])
@@ -21,6 +23,8 @@ class SnippetViewSet(viewsets.ModelViewSet):
    serializer_class = SnippetSerializer
    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                          IsOwnerOrReadOnly]
+   filter_backends = (filters.DjangoFilterBackend,)
+   filterset_class = SnippetFilter
 
    @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
    def highlight(self, request, *args, **kwargs):
